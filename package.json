@@ -2,7 +2,6 @@
   "name": "jbl-admin",
   "version": "0.1.0",
   "private": true,
-  "homepage": "./src/index.tsx",
   "scripts": {
     "start": "react-scripts start",
     "build": "react-scripts build",
