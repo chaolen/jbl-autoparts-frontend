@@ -1,4 +1,5 @@
 import { useDropzone } from "react-dropzone";
+import { addCloudinaryTransform } from "utils/transform-image";
 
 type ImagePickerProps = {
   images: any[];
@@ -63,7 +64,7 @@ const ImagePicker = ({ images, setImages, isMobile }: ImagePickerProps) => {
           {images.map((image, index) => (
             <div
               className="h-32 rounded-md shadow bg-cover bg-center"
-              style={{ backgroundImage: `url(${image.url})` }}
+              style={{ backgroundImage: `url(${addCloudinaryTransform(image.url, 'w_300,h_300,c_thumb')})` }}
             >
               <button
                 className="z-10 bg-white m-1 p-1 rounded"

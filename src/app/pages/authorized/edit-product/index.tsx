@@ -98,7 +98,7 @@ const EditProduct = () => {
       setProduct({
         ...product,
         hasParentId: !!product.parentId,
-        images: product.images.map((url: any) => ({ url: getImageUrl(url) ?? '', file: null }))
+        images: product.images.map((url: any) => ({ url, file: null }))
       });
       setIsLoading(false);
     } catch (error) {
@@ -153,7 +153,7 @@ const EditProduct = () => {
         if (imageFile?.file) {
           formData.append("files", imageFile.file);
         } else if (imageFile?.url) {
-          existingImageUrls.push(imageFile.url.slice(apiURL?.length || ""));
+          existingImageUrls.push(imageFile.url);
         }
       });
 
@@ -199,7 +199,7 @@ const EditProduct = () => {
         if (imageFile?.file) {
           formData.append("files", imageFile.file);
         } else if (imageFile?.url) {
-          existingImageUrls.push(imageFile.url.slice(apiURL?.length || ""));
+          existingImageUrls.push(imageFile.url);
         }
       });
 
@@ -241,7 +241,7 @@ const EditProduct = () => {
 
     setProductToEdit({
       ...variant,
-      images: variant.images.map((url: any) => ({ url: getImageUrl(url) ?? '', file: null }))
+      images: variant.images.map((url: any) => ({ url, file: null }))
     })
     toggleEditVariantModalOpen();
   }
@@ -275,7 +275,7 @@ const EditProduct = () => {
         if (imageFile?.file) {
           formData.append("files", imageFile.file);
         } else if (imageFile?.url) {
-          existingImageUrls.push(imageFile.url.slice(apiURL?.length || ""));
+          existingImageUrls.push(imageFile.url);
         }
       });
 

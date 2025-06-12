@@ -226,7 +226,7 @@ const Table = ({
       setAddProduct({
         ...value,
         images: value.images.map((url: any) => ({
-          url: url ?? "",
+          url,
           file: null,
         })),
       })

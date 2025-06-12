@@ -71,7 +71,6 @@ const ViewProduct = () => {
       setProduct({
         ...product,
         hasParentId: !!product.parentId,
-        images: product.images.map((url: any) => getImageUrl(url)),
       });
       setIsLoading(false);
     } catch (error) {

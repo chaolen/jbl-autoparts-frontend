@@ -30,7 +30,11 @@ const Results = ({ results }: ResultsProps) => {
             onClick={() => viewProduct(result)}
             className="shadow-xl rounded-xl cursor-pointer"
           >
-            <ProductImage height="aspect-square" product={result}>
+            <ProductImage
+              imageTransform="w_300,h_300,c_thumb"
+              height="aspect-square"
+              product={result}
+            >
               <ProductStatus status={result.status} />
             </ProductImage>
             <div className="p-2 pb-4">

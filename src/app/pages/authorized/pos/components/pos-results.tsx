@@ -18,53 +18,74 @@ type POSResultsProps = {
   loading: boolean;
 };
 
-const POSResults = ({ results, addToCart, cartItems = [], loading, removeCartItem }: POSResultsProps) => {
+const POSResults = ({
+  results,
+  addToCart,
+  cartItems = [],
+  loading,
+  removeCartItem,
+}: POSResultsProps) => {
   const role = useSelector((state: RootState) => state.user.role);
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
-  const renderLoadingState = () => (
-    <LoadingComponent height="h-[200px]" />
-  )
+  const renderLoadingState = () => <LoadingComponent height="h-[200px]" />;
 
   const onClickView = (itemId: string, e: any) => {
     e.stopPropagation();
     dispatch(setViewProductId(itemId));
     navigate(`/${role}/view-product`);
-  }
+  };
 
   const renderResults = () => {
     return (
       <>
         {results?.map((result) => {
           const isOutOfStock = result.quantityRemaining <= 0;
-          const matchingCartItem = cartItems?.find(cartItem => cartItem._id === result._id);
+          const matchingCartItem = cartItems?.find(
+            (cartItem) => cartItem._id === result._id
+          );
           const hasCount = (matchingCartItem?.count ?? 0) > 0;
-          const cartItemIndex = cartItems?.findIndex(item => item._id === result._id);
+          const cartItemIndex = cartItems?.findIndex(
+            (item) => item._id === result._id
+          );
           return (
             <div
               onClick={() => {
                 if (!isOutOfStock) {
-                  cartItemIndex > -1 ? removeCartItem(result?._id ?? "") : addToCart(result);
+                  cartItemIndex > -1
+                    ? removeCartItem(result?._id ?? "")
+                    : addToCart(result);
                 }
               }}
-              className={`shadow-sm rounded cursor-pointer border border-gray-200 hover:border-primary ${isOutOfStock ? 'pointer-events-none opacity-50' : ''
-                }`}
-              title={isOutOfStock ? 'Out of stock' : result?.name}
+              className={`shadow-sm rounded cursor-pointer border border-gray-200 hover:border-primary ${
+                isOutOfStock ? "pointer-events-none opacity-50" : ""
+              }`}
+              title={isOutOfStock ? "Out of stock" : result?.name}
             >
-              <ProductImage product={result} height="aspect-square" borderRadius="rounded-md">
-                {hasCount && <div className="flex p-2 bg-primary-lightGreen text-primary-green rounded-md text-sm font-semibold justify-center justify-self-end">
-                  <img src="/images/check-circle-green.svg" alt="added" className="h-4 w-4" />
-                </div>}
+              <ProductImage
+                imageTransform="w_200,h_200,c_thumb"
+                product={result}
+                height="aspect-square"
+                borderRadius="rounded-md"
+              >
+                {hasCount && (
+                  <div className="flex p-2 bg-primary-lightGreen text-primary-green rounded-md text-sm font-semibold justify-center justify-self-end">
+                    <img
+                      src="/images/check-circle-green.svg"
+                      alt="added"
+                      className="h-4 w-4"
+                    />
+                  </div>
+                )}
               </ProductImage>
               <div className="flex h-[130px]">
-                <div
-                  className="p-1 flex flex-col w-full h-100"
-                >
+                <div className="p-1 flex flex-col w-full h-100">
                   <button
                     title="View Details"
                     onClick={(e) => onClickView(result._id ?? "", e)}
-                    className="line-clamp-3 font-semibold text-sm text-primary text-left overflow-hidden text-ellipsis mb-1">
+                    className="line-clamp-3 font-semibold text-sm text-primary text-left overflow-hidden text-ellipsis mb-1"
+                  >
                     {result.name}
                   </button>
                   <p className="line-clamp-3 font-medium text-primary text-xs text-left mb-1">
@@ -73,7 +94,10 @@ const POSResults = ({ results, addToCart, cartItems = [], loading, removeCartIte
                   <Status justify="justify-start" status={result?.status} />
                   <div className="flex flex-1 items-end justify-end">
                     <p className="font-medium text-primary text-xs">
-                      Stock: <span className="font-semibold">{result.quantityRemaining}</span>
+                      Stock:{" "}
+                      <span className="font-semibold">
+                        {result.quantityRemaining}
+                      </span>
                     </p>
                   </div>
                 </div>
@@ -82,14 +106,15 @@ const POSResults = ({ results, addToCart, cartItems = [], loading, removeCartIte
           );
         })}
       </>
-    )
-  }
+    );
+  };
 
-  return (
-    loading ? renderLoadingState() :
-      <div className="grid grid-cols-4 gap-4 max-mobile:grid-cols-2 p-2">
-        {renderResults()}
-      </div>
+  return loading ? (
+    renderLoadingState()
+  ) : (
+    <div className="grid grid-cols-4 gap-4 max-mobile:grid-cols-2 p-2">
+      {renderResults()}
+    </div>
   );
 };
 

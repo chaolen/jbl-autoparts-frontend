@@ -1,6 +1,7 @@
 import { getImageUrl } from "helpers";
 import React, { useEffect, useState } from "react";
 import { ProductDetails } from "types/inventory";
+import { addCloudinaryTransform } from "utils/transform-image";
 
 const isValidImage = (url: string) => {
   return new Promise((resolve) => {
@@ -13,7 +14,7 @@ const isValidImage = (url: string) => {
 
 const getFirstValidImage = async (imageUrls: any[]) => {
   for (const url of imageUrls) {
-    const imageUrl = url.startsWith('uploads') ? getImageUrl(url) : url;
+    const imageUrl = url;
     const isValid = await isValidImage(imageUrl);
     if (isValid) {
       return imageUrl;
@@ -28,6 +29,7 @@ type ProductImageProps = {
   height?: string;
   width?: string;
   borderRadius?: string;
+  imageTransform?: string;
 };
 
 const ProductImage = ({
@@ -36,6 +38,7 @@ const ProductImage = ({
   height,
   width,
   borderRadius,
+  imageTransform = '',
 }: ProductImageProps) => {
   const [validImageUrl, setImageUrl] = useState<any>(null);
 
@@ -57,7 +60,7 @@ const ProductImage = ({
     <div
       className={`${height ?? "h-[150px]"} ${width ??
         "w-full"} ${borderRadius ?? 'rounded-t-xl'} bg-cover bg-center`}
-      style={{ backgroundImage: `url(${validImageUrl})` }}
+      style={{ backgroundImage: `url(${addCloudinaryTransform(validImageUrl, imageTransform)})` }}
     >
       {children}
     </div>

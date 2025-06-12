@@ -44,18 +44,6 @@ export const productsApi = createApi({
         url: `api/v1/products?page=${page +
           1}&limit=${limit}&search=${search}&status=${status}&noVariant=${noVariant}`,
       }),
-      transformResponse: (response: GetProductsResponse) => {
-        return {
-          ...response,
-          data: {
-            ...response.data,
-            products: response.data.products.map(product => ({
-              ...product,
-              images: product.images.map(image => `${apiURL}${image}`)
-            }))
-          }
-        };
-      },
     }),
     editProduct: builder.mutation<any, { productId: string; formData: FormData }>({
       query: ({ formData, productId }) => ({

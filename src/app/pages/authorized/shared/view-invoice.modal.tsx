@@ -84,6 +84,7 @@ const ViewInvoiceModal = ({
               borderRadius="rounded-md"
               height="h-[60px]"
               width="w-[60px]"
+              imageTransform="w_100,h_100,c_thumb"
             />
             <div className="flex-1 space-y-1">
               <p className="font-medium text-sm text-primary">

@@ -21,7 +21,7 @@ export const editProductSlice = createSlice({
       const payload = action.payload;
       state.product = {
         ...payload,
-        images: payload.images.map((url: any) => ({ url: url ?? '', file: null }))
+        images: payload.images.map((url: any) => ({ url, file: null }))
       };
     },
     clearData: () => initialState,
