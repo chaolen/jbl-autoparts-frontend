@@ -8,8 +8,8 @@ type CheckoutCartProps = {
   cartItems: CartItem[];
   removeCartItem: (itemId: string) => void;
   setCartItems: (val: any) => void;
-  discountPercent: number;
-  setDiscountPercent: (val: number) => void;
+  discountAmount: number;
+  setDiscountAmount: (val: number) => void;
   toggleDeleteCartModal: () => void;
   toggleShowReservedItemsModal: () => void;
   toggleShowPartsmanModal: () => void;
@@ -23,8 +23,8 @@ const CheckoutCart = ({
   cartItems,
   removeCartItem,
   setCartItems,
-  discountPercent,
-  setDiscountPercent,
+  discountAmount,
+  setDiscountAmount,
   toggleDeleteCartModal,
   toggleShowReservedItemsModal,
   toggleShowPartsmanModal,
@@ -33,8 +33,10 @@ const CheckoutCart = ({
   partsman,
   hasTransactionId,
 }: CheckoutCartProps) => {
-
   const hasPartsman = !!partsman?._id;
+  const [tempDiscountAmount, setTempDiscountAmount] = React.useState<
+    number | string
+  >(discountAmount);
 
   const getTotalAmount = useCallback(() => {
     const totalAmount = cartItems?.reduce((total, item) => {
@@ -84,22 +86,28 @@ const CheckoutCart = ({
     );
   };
 
-  const total = formatAmount(getTotalAmount() * (1 - discountPercent));
+  const total = formatAmount(getTotalAmount() - discountAmount);
 
-  const discountAmount = formatAmount(getTotalAmount() * discountPercent);
-  const hasDiscount = discountPercent > 0;
+  const hasDiscount = discountAmount > 0;
 
-  const renderPartsman = () => (
-    hasPartsman ?
+  const renderPartsman = () =>
+    hasPartsman ? (
       <div className="flex flex-row items-center">
         <p className="text-xs">Partsman:</p>
         <p className="text-xs">{partsman.name}</p>
-        <button onClick={onRemovePartsman} title="Remove" className="text-gray-500 hover:text-red-700 text-xs px-2">✕</button>
+        <button
+          onClick={onRemovePartsman}
+          title="Remove"
+          className="text-gray-500 hover:text-red-700 text-xs px-2"
+        >
+          ✕
+        </button>
       </div>
-      : (
-        <button onClick={toggleShowPartsmanModal} className="underline text-xs">Choose Partsman</button>
-      )
-  )
+    ) : (
+      <button onClick={toggleShowPartsmanModal} className="underline text-xs">
+        Choose Partsman
+      </button>
+    );
 
   return (
     <div className="flex flex-col h-full">
@@ -154,34 +162,52 @@ const CheckoutCart = ({
           <span>Sub-total</span>
           <span>{formatAmount(getTotalAmount())}</span>
         </div>
+        {hasDiscount && (
+          <div className="flex justify-between font-semibold text-sm text-red-700 justify-self-end">
+            - {formatAmount(discountAmount)}
+          </div>
+        )}
         <div className="flex flex justify-between items-center gap-2">
-          <label className="text-sm font-semibold text-primary">Discount
-            <label className="text-xs text-gray-400 font-semibold ml-1">(decimal)</label>
+          <label className="text-sm font-semibold text-primary">
+            Discount
+            <label className="text-xs text-gray-400 font-semibold ml-1">
+              (amount)
+            </label>
           </label>
           <div className="flex flex-row items-center space-x-1">
             <input
-              type="number"
-              min={0}
-              max={1}
-              value={discountPercent}
-              onBlur={e => {
-                const value = Number(e.target.value);
-                if (value >= 1) {
-                  setDiscountPercent(1);
-                } else {
-                  setDiscountPercent(value);
+              value={tempDiscountAmount}
+              onChange={(e) => {
+                // Allow any raw string (e.g., "-", "", "001") while typing
+                setTempDiscountAmount(e.target.value);
+              }}
+              onKeyDown={e => {
+                if (e.key === 'Enter') {
+                  let value = Number(e.currentTarget.value);
+
+                  // Clamp negative values and invalid entries
+                  if (isNaN(value) || value < 0) value = 0;
+
+                  setDiscountAmount(value);
+                  setTempDiscountAmount(String(value)); // Sync back the cleaned value
                 }
               }}
-              onChange={(e) => setDiscountPercent(Number(e.target.value))}
+              onBlur={(e) => {
+                let value = Number(e.target.value);
+
+                // Clamp negative values and invalid entries
+                if (isNaN(value) || value < 0) value = 0;
+
+                console.log({ value });
+
+                setDiscountAmount(value); // Final numeric discount
+
+                setTempDiscountAmount(String(value)); // Sync back the cleaned value
+              }}
               className="w-20 border border-gray-300 rounded px-2 py-1 text-sm"
             />
           </div>
         </div>
-        {hasDiscount && (
-          <div className="flex justify-between font-semibold text-sm text-red-700 justify-self-end">
-            - {discountAmount}
-          </div>
-        )}
       </div>
       <div className="flex justify-between font-bold text-xl text-primary px-3 pb-3">
         <span>Total</span>

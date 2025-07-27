@@ -15,7 +15,7 @@ import {
   setPartsman,
   setTransactionid,
   setTransaction,
-  setDiscountPercent,
+  setDiscountAmount,
   setActiveTab,
 } from "store/slices/posSlice";
 import DeleteCartModal from "./components/delete-cart.modal";
@@ -45,10 +45,8 @@ const POSPage = () => {
   const [trigger, productsResponse] = useLazyGetProductsQuery();
   const [getUsers, usersResponse] = useLazyGetUsersQuery();
   const [createTransaction] = useCreateTransactionMutation();
-  const [
-    getMyTransactions,
-    transactionsResponse,
-  ] = useLazyGetMyTransactionsQuery();
+  const [getMyTransactions, transactionsResponse] =
+    useLazyGetMyTransactionsQuery();
   const [getMyStatistics, statisticsResponse] = useLazyGetMyStatisticsQuery();
   const [cancelTransaction, cancelResponse] = useCancelTransactionMutation();
   const [updateTransaction, updateResponse] = useUpdateTransactionMutation();
@@ -57,57 +55,64 @@ const POSPage = () => {
   const state = useSelector((state: RootState) => state);
   const pos = state.pos;
   const user = state.user;
-  const isAdmin = user.role === 'admin';
+  const isAdmin = user.role === "admin";
   const filter = pos.globalFilter;
   const searchResult = pos.results;
   const cartItems = pos.cartItems;
   const selectedPartsman = pos.partsman;
   const id = pos.transactionId;
-  const discountPercent = pos.discountPercent;
+  const discountAmount = pos.discountAmount;
   const activeTab = pos.activeTab;
   const transactionItems = pos.transactionItems;
 
   const statistics = statisticsResponse.data?.data;
 
   const [transactions, setTransactions] = useState();
-  const [pagination, setPagination] = useState({ total: 0, page: 0, limit: 10, totalPages: 0 });
-  const [transactionFilter, setTransactionFilter] = useState('');
+  const [pagination, setPagination] = useState({
+    total: 0,
+    page: 0,
+    limit: 10,
+    totalPages: 0,
+  });
+  const [transactionFilter, setTransactionFilter] = useState("");
   const [isLoading, setIsLoading] = useState(true);
   const [showDeleteCart, setShowDeleteCart] = useState(false);
   const [showReserveItemsModal, setShowReserveItemsModal] = useState(false);
   const [showViewInvoiceModal, setShowViewInvoiceModal] = useState(false);
   const [showPartsmanModal, setShowPartsmanModal] = useState(false);
   const [partsmanUsers, setPartsmanUsers] = useState<User[]>([]);
-  const [
-    updateTransactionStatusModal,
-    setUpdateTransactionStatusModal,
-  ] = useState(false);
-  const [
-    selectedTransactionToUpdate,
-    setSelectedTransactionToUpdate,
-  ] = useState<Transaction>();
+  const [updateTransactionStatusModal, setUpdateTransactionStatusModal] =
+    useState(false);
+  const [selectedTransactionToUpdate, setSelectedTransactionToUpdate] =
+    useState<Transaction>();
 
   const [viewTransaction, setViewTransaction] = useState<Transaction>();
 
-
-  const fetchTransactions = useCallback(async (page = pagination.page, limit = pagination.limit) => {
-    try {
-      const response: any = await getMyTransactions({ isAdmin, page, limit, search: transactionFilter });
-      setTransactions(response?.data?.data);
-      setPagination(response?.data?.pagination);
-    } catch (err) {
-      console.error('Error fetching transactions:', err);
-    } finally {
-    }
-  }, [pagination, transactionFilter]);
-
+  const fetchTransactions = useCallback(
+    async (page = pagination.page, limit = pagination.limit) => {
+      try {
+        const response: any = await getMyTransactions({
+          isAdmin,
+          page,
+          limit,
+          search: transactionFilter,
+        });
+        setTransactions(response?.data?.data);
+        setPagination(response?.data?.pagination);
+      } catch (err) {
+        console.error("Error fetching transactions:", err);
+      } finally {
+      }
+    },
+    [pagination, transactionFilter]
+  );
 
   const _setActiveTab = (val: string) => {
     dispatch(setActiveTab(val));
   };
 
-  const _setDiscountPercent = (val: number) => {
-    dispatch(setDiscountPercent(val));
+  const _setDiscountAmount = (val: number) => {
+    dispatch(setDiscountAmount(val));
   };
 
   const toggleUpdateTransactionStatusModal = () => {
@@ -188,7 +193,7 @@ const POSPage = () => {
 
     try {
       const response: any = await updateTransaction({
-        id: selectedTransactionToUpdate?._id ?? '',
+        id: selectedTransactionToUpdate?._id ?? "",
         payload: transactionDetails,
       });
       if (response?.error) {
@@ -206,11 +211,13 @@ const POSPage = () => {
       dispatch(setIsAppLoading(false));
     }
   }, [selectedTransactionToUpdate]);
-  
+
   const onReturnTransaction = useCallback(async () => {
     dispatch(setIsAppLoading(true));
     try {
-      const response: any = await returnTransaction(selectedTransactionToUpdate?._id ?? '');
+      const response: any = await returnTransaction(
+        selectedTransactionToUpdate?._id ?? ""
+      );
       if (response?.error) {
         toast.error(response.error?.data?.message ?? "");
         dispatch(setIsAppLoading(false));
@@ -262,8 +269,8 @@ const POSPage = () => {
     let transactionDetails = {
       items,
       cashier: user.id,
-      total: getTotalAmount() * (1 - discountPercent),
-      discount: discountPercent,
+      total: getTotalAmount() - discountAmount,
+      discount: discountAmount,
       status: "reserved",
       partsman: selectedPartsman?._id ?? undefined,
     };
@@ -311,8 +318,8 @@ const POSPage = () => {
     let transactionDetails = {
       items,
       cashier: user.id,
-      total: getTotalAmount() * (1 - discountPercent),
-      discount: discountPercent,
+      total: getTotalAmount() - discountAmount,
+      discount: discountAmount,
       status: "completed",
       partsman: selectedPartsman?._id ?? undefined,
     };
@@ -407,9 +414,9 @@ const POSPage = () => {
         cartItems.map((i, index) =>
           cartIndex === index
             ? {
-              ...i,
-              count: (i?.count ?? 0) + 1,
-            }
+                ...i,
+                count: (i?.count ?? 0) + 1,
+              }
             : i
         )
       );
@@ -471,8 +478,8 @@ const POSPage = () => {
             setCartItems={_setCartItems}
             removeCartItem={removeCartItem}
             cartItems={cartItems}
-            discountPercent={discountPercent}
-            setDiscountPercent={_setDiscountPercent}
+            discountAmount={discountAmount}
+            setDiscountAmount={_setDiscountAmount}
             toggleDeleteCartModal={toggleDeleteCartModal}
             toggleShowReservedItemsModal={toggleShowReservedItemsModal}
             toggleShowPartsmanModal={toggleShowPartsmanModal}
@@ -560,16 +567,16 @@ const POSPage = () => {
           {tabs.map((tab) => (
             <button
               key={tab}
-              className={`py-2 px-4 text-sm font-medium capitalize ${activeTab === tab
-                ? "border-b-2 border-primary text-primary"
-                : "text-gray-500 hover:text-gray-700"
-                }`}
+              className={`py-2 px-4 text-sm font-medium capitalize ${
+                activeTab === tab
+                  ? "border-b-2 border-primary text-primary"
+                  : "text-gray-500 hover:text-gray-700"
+              }`}
               onClick={() => _setActiveTab(tab)}
             >
               {tab}
             </button>
           ))}
-
         </div>
         {activeTab === "history" && renderPagination()}
       </div>

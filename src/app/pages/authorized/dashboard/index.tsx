@@ -91,7 +91,7 @@ const Dashboard = () => {
         transactionId: txn?._id,
         globalFilter: "",
         activeTab: "invoicing",
-        discountPercent: txn?.discount ?? 0,
+        discountAmount: txn?.discount ?? 0,
       })
     );
     toggleShowViewInvoiceModal();

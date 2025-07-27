@@ -10,7 +10,7 @@ export interface POSState {
   results?: ProductDetails[];
   cartItems: CartItem[];
   partsman?: User;
-  discountPercent: number;
+  discountAmount: number;
   transactionId?: string;
   activeTab?: string;
   transactionItems?: ProductDetails[];
@@ -22,7 +22,7 @@ const initialState: POSState = {
   cartItems: [],
   transactionItems: [],
   activeTab: 'invoicing',
-  discountPercent: 0,
+  discountAmount: 0,
 }
 
 export const posSlice = createSlice({
@@ -55,8 +55,8 @@ export const posSlice = createSlice({
     setPartsman(state, action: PayloadAction<User>) {
       state.partsman = action.payload;
     },
-    setDiscountPercent(state, action: PayloadAction<number>) {
-      state.discountPercent = action.payload;
+    setDiscountAmount(state, action: PayloadAction<number>) {
+      state.discountAmount = action.payload;
     },
     setTransactionid(state, action: PayloadAction<string | undefined>) {
       state.transactionId = action.payload;
@@ -76,7 +76,7 @@ export const posSlice = createSlice({
       state = {
         ...state,
         cartItems: [],
-        discountPercent: 0,
+        discountAmount: 0,
         transactionId: undefined,
         partsman: undefined,
       }
@@ -93,7 +93,7 @@ export const {
   setCartItems,
   clearCart,
   setPartsman,
-  setDiscountPercent,
+  setDiscountAmount,
   setTransactionid,
   setTransaction,
   setActiveTab,
