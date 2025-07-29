@@ -76,7 +76,7 @@ const TransactionsDocument = ({ transactions }: TransactionsDocumentProps) => (
           </View>
           <View style={styles.row}>
             <Text style={styles.label}>Discount:</Text>
-            <Text style={styles.value}>{(tx.discount * 100).toFixed(0)}%</Text>
+            <Text style={styles.value}>{(tx.discount).toFixed(0)}</Text>
           </View>
           <View style={styles.row}>
             <Text style={styles.label}>Date:</Text>

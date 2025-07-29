@@ -198,8 +198,6 @@ const CheckoutCart = ({
                 // Clamp negative values and invalid entries
                 if (isNaN(value) || value < 0) value = 0;
 
-                console.log({ value });
-
                 setDiscountAmount(value); // Final numeric discount
 
                 setTempDiscountAmount(String(value)); // Sync back the cleaned value

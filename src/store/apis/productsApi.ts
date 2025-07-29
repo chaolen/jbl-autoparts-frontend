@@ -64,7 +64,6 @@ export const productsApi = createApi({
         method: "GET",
       }),
       transformResponse: (response: GetProductsByStatusResponse) => {
-        console.log(response);
         return {
           ...response,
           data: response.data.map(product => ({

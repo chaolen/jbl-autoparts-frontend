@@ -23,7 +23,6 @@ const InventoryDetails = ({
   const [quantitySold, setQuantitySold] = useState(fields.quantitySold);
   const [quantityThreshold, setQuantityThreshold] = useState(fields.quantityThreshold ?? 1);
 
-  console.log(errors)
   const handleQuantityChange = (name: string, value: number) => {
     if (name === "quantityRemaining") {
       setQuantityRemaining(value);

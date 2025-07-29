@@ -42,7 +42,7 @@ const ViewInvoiceModal = ({
       0
     ) ?? 0;
 
-  const discountAmount = subTotal * discount;
+  const discountAmount = discount;
   const hasDiscount = discount > 0;
   const status = invoice?.status;
   const isCompleted = status === 'completed';
@@ -112,7 +112,7 @@ const ViewInvoiceModal = ({
         {hasDiscount && (
           <div className="flex justify-between">
             <span>
-              Discount: <span className="">({discount * 100}%)</span>
+              Discount:
             </span>
             <div>
               <span className="text-red-700 text-sm">
