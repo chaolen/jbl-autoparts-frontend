@@ -13,6 +13,11 @@ type StatisticCarsProps = {
 
 const statsData = [
   {
+    key: "total_inventory_value",
+    label: "Total Inventory Value",
+    isAmount: true,
+  },
+  {
     key: "total_sales",
     label: "Total Sales",
     isAmount: true,
