@@ -65,16 +65,6 @@ const LoginPage = () => {
   };
 
   return (
-    <button
-      onClick={() => {
-        throw new Error("This is your first error!");
-      }}
-    >
-      Break the world
-    </button>
-  );
-
-  return (
     <div className="flex flex-col w-full min-h-screen justify-center items-center px-4">
       <img
         src="/images/jbl-logo.svg"
