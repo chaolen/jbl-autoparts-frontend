@@ -7,6 +7,8 @@ import {
 } from "store/apis/userApi";
 import { RootState } from "store/store";
 import { User } from "types/user";
+import * as Sentry from '@sentry/react';
+
 
 type ProfileTabProps = {
   refreshData: () => void;
@@ -88,6 +90,7 @@ const ProfileTab = ({
       });
       toast.success("User details updated!");
     } catch (error) {
+      Sentry.captureException(error);
       toast.success("Something went wrong try again");
     }
   };
@@ -117,6 +120,7 @@ const ProfileTab = ({
       setPasswordVisibile({ confirmPassword: false, newPassword: false });
       setPasswordData({ confirmPassword: "", newPassword: "" });
     } catch (error) {
+      Sentry.captureException(error);
       toast.success("Something went wrong try again");
     }
   };

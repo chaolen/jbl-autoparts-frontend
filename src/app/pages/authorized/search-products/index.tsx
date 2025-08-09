@@ -5,6 +5,7 @@ import { useLazyGetProductsQuery } from "store/apis/productsApi";
 import { setGlobalFilter, setPageIndex, setPageSize, setResults, setTotal } from "store/slices/searchSlice";
 import { RootState } from "store/store";
 import Results from "./components/results";
+import * as Sentry from '@sentry/react';
 
 function DebouncedInput({
   value: initialValue,
@@ -74,6 +75,7 @@ const SearchProducts = () => {
     } catch (error) {
       toast.error("Something went wrong, try again later.");
       setIsLoading(false);
+      Sentry.captureException(error);
     }
   }, [pageIndex, pageSize, globalFilter]);
 

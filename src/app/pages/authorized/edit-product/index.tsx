@@ -20,6 +20,7 @@ import { getImageUrl } from "helpers";
 import EditProductVariantModal from "./components/edit-product-variant.modal";
 import DeleteProductVariantModal from "./components/delete-product-variant.modal";
 import { setIsAppLoading } from "store/slices/appSlice";
+import * as Sentry from '@sentry/react';
 const apiURL = process.env.REACT_APP_API_BASE_URL;
 
 const validationSchema = Yup.object({
@@ -105,6 +106,7 @@ const EditProduct = () => {
       console.error("Failed to fetch product:", error);
       toast.error("Failed to fetch product details.");
       setIsLoading(false);
+      Sentry.captureException(error);
     }
   };
 
@@ -169,6 +171,7 @@ const EditProduct = () => {
     } catch (err) {
       console.error("Product variant update failed:", err);
       toast.error("Update variant product failed.");
+      Sentry.captureException(err);
     }
   }
 
@@ -218,6 +221,7 @@ const EditProduct = () => {
     } catch (err) {
       console.error("Product updated failed:", err);
       toast.error("Update product failed.");
+      Sentry.captureException(err);
     }
   }
 
@@ -289,6 +293,7 @@ const EditProduct = () => {
       navigate(-1);
     } catch (err) {
       console.error("Product updated failed:", err);
+      Sentry.captureException(err);
       toast.error("Update product failed.");
     }
   };

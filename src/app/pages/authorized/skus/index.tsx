@@ -27,6 +27,7 @@ import { useDispatch } from "react-redux";
 import { setIsAddSKUsModalVisible } from "store/slices/appSlice";
 import toast from "react-hot-toast";
 import DeleteSKUModal from "./components/delete-sku-modal";
+import * as Sentry from '@sentry/react';
 
 declare module "@tanstack/react-table" {
   interface FilterFns {
@@ -94,6 +95,7 @@ const SKUs = () => {
       refreshRecord();
     } catch (error) {
       toast.error("Sorry something went wrong, please try again later");
+      Sentry.captureException(error);
     }
   }, [skuToDelete]);
 

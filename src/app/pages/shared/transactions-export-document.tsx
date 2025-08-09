@@ -4,6 +4,7 @@ import moment from 'moment';
 import { Transaction } from 'types/transaction';
 import { useLazyGetAllTransactionsQuery } from 'store/apis/transactionsApi';
 import toast from 'react-hot-toast';
+import * as Sentry from '@sentry/react';
 
 const styles = StyleSheet.create({
   page: {
@@ -119,6 +120,7 @@ const ExportTransactionsPDF = ({ }: ExportTransactionsPDFProps) => {
     } catch (error) {
       setError(true);
       setLoading(false);
+      Sentry.captureException(error);
     }
   }, [])
 

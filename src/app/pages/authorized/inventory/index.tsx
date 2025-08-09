@@ -17,6 +17,7 @@ import {
   setStatus,
   setTotal,
 } from "store/slices/inventorySlice";
+import * as Sentry from '@sentry/react';
 
 const stats = [
   {
@@ -99,6 +100,7 @@ const Inventory = () => {
     } catch (error) {
       toast.error("Something went wrong, try again later.");
       setIsLoading(false);
+      Sentry.captureException(error);
     }
   }, [pageIndex, pageSize, globalFilter, status.value, withVaraint]);
 

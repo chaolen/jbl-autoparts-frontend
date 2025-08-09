@@ -7,6 +7,7 @@ import { Status } from 'store/slices/inventorySlice';
 import { useLazyGetProductByStatusQuery } from 'store/apis/productsApi';
 import toast from 'react-hot-toast';
 import moment from 'moment';
+import * as Sentry from '@sentry/react';
 
 type ExportPDFButtonProps = {
   products?: ProductDetails[];
@@ -34,6 +35,7 @@ const ExportProductsPDFButton = ({ status }: ExportPDFButtonProps) => {
     } catch (error) {
       setError(true);
       setLoading(false);
+      Sentry.captureException(error);
     }
   }, [status])
 

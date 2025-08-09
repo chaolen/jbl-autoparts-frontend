@@ -9,6 +9,7 @@ import AddUser from './components/add-user.modal';
 import { FormikHelpers } from 'formik';
 import toast from 'react-hot-toast';
 import { userStatusStyles } from 'constants/status';
+import * as Sentry from '@sentry/react';
 
 const fuzzyFilter: FilterFn<any> = (row, columnId, value, addMeta) => {
   // Rank the item
@@ -206,6 +207,7 @@ const UsersPage = () => {
     } catch (error) {
       console.error("User create failed:", error);
       toast.error("Failed to create user.");
+      Sentry.captureException(error);
     }
   }
 

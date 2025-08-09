@@ -28,6 +28,7 @@ import { setTransaction } from "store/slices/posSlice";
 import { CartItem } from "types/pos";
 import { User } from "types/user";
 import { useNavigate } from "react-router";
+import * as Sentry from '@sentry/react';
 
 const Dashboard = () => {
   const state = useSelector((state: RootState) => state);
@@ -73,6 +74,7 @@ const Dashboard = () => {
       dispatch(setIsAppLoading(false));
     } catch (error) {
       console.log(error);
+      Sentry.captureException(error);
       toast.error("Something went wrong, try again later.");
       dispatch(setIsAppLoading(false));
     }
@@ -114,6 +116,7 @@ const Dashboard = () => {
       dispatch(setIsAppLoading(false));
     } catch (error) {
       console.log(error);
+      Sentry.captureException(error);
       toast.error("Something went wrong, try again later.");
       dispatch(setIsAppLoading(false));
     }
@@ -157,6 +160,7 @@ const Dashboard = () => {
       dispatch(setTotal(response.data?.data?.pagination?.total ?? 0));
       setTransactions(response.data?.data.transactions);
     } catch (error) {
+      Sentry.captureException(error);
       toast.error("Something went wrong, try again later.");
     }
   }, [pageIndex, pageSize, globalFilter]);

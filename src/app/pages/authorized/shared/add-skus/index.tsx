@@ -8,6 +8,7 @@ import { RootState } from "store/store";
 import { setIsAddSKUsModalVisible } from "store/slices/appSlice";
 import toast from "react-hot-toast";
 import { useCreateSKUsMutation, useLazyCheckSKUQuery } from "store/apis/skusApi";
+import * as Sentry from '@sentry/react';
 
 type AddSKUsProps = {
   refreshRecord: () => void;
@@ -167,6 +168,7 @@ const AddSKUs = ({ refreshRecord }: AddSKUsProps) => {
         toast.success("SKUs created successully.");
       } catch (error) {
         toast.success("Sorry, Something went wrong.");
+        Sentry.captureException(error);
       }
     } else {
       toast.error("Please complete all forms before submitting.");

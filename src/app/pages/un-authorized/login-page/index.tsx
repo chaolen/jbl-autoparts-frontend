@@ -5,6 +5,7 @@ import { useNavigate } from "react-router";
 import { useSignInMutation } from "store/apis/userApi";
 import { setSession } from "store/slices/userSlice";
 import { RootState } from "store/store";
+import * as Sentry from "@sentry/react";
 
 type SigInData = {
   username: string;
@@ -51,7 +52,8 @@ const LoginPage = () => {
 
       toast.success("User authenticated.");
     } catch (err: any) {
-      if (err?.status === 'FETCH_ERROR') {
+      Sentry.captureException(err);
+      if (err?.status === "FETCH_ERROR") {
         toast.error("No Internet.");
       } else if (err?.status === 403) {
         toast.error(err?.data?.message);
@@ -61,6 +63,16 @@ const LoginPage = () => {
       console.error("Login failed:", err);
     }
   };
+
+  return (
+    <button
+      onClick={() => {
+        throw new Error("This is your first error!");
+      }}
+    >
+      Break the world
+    </button>
+  );
 
   return (
     <div className="flex flex-col w-full min-h-screen justify-center items-center px-4">
@@ -104,7 +116,11 @@ const LoginPage = () => {
                 className="p-2 text-gray-500"
               >
                 {!showPassword ? (
-                  <img src="/images/eye-off.svg" alt="eye-off" className="h-5 w-5" />
+                  <img
+                    src="/images/eye-off.svg"
+                    alt="eye-off"
+                    className="h-5 w-5"
+                  />
                 ) : (
                   <img src="/images/eye.svg" alt="eye" className="h-5 w-5" />
                 )}

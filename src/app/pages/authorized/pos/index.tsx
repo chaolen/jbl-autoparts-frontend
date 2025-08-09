@@ -36,6 +36,7 @@ import { setIsAppLoading } from "store/slices/appSlice";
 import UpdateTransactionModal from "./components/update-transaction.modal";
 import { Transaction } from "types/transaction";
 import ViewInvoiceModal from "../shared/view-invoice.modal";
+import * as Sentry from '@sentry/react';
 
 const tabs = ["invoicing", "history"];
 
@@ -101,6 +102,7 @@ const POSPage = () => {
         setPagination(response?.data?.pagination);
       } catch (err) {
         console.error("Error fetching transactions:", err);
+        Sentry.captureException(err);
       } finally {
       }
     },
@@ -209,6 +211,7 @@ const POSPage = () => {
       console.log(error);
       toast.error("Something went wrong, try again later.");
       dispatch(setIsAppLoading(false));
+      Sentry.captureException(error);
     }
   }, [selectedTransactionToUpdate]);
 
@@ -231,6 +234,7 @@ const POSPage = () => {
       console.log(error);
       toast.error("Something went wrong, try again later.");
       dispatch(setIsAppLoading(false));
+      Sentry.captureException(error);
     }
   }, [selectedTransactionToUpdate]);
 
@@ -256,6 +260,7 @@ const POSPage = () => {
       console.log(error);
       toast.error("Something went wrong, try again later.");
       dispatch(setIsAppLoading(false));
+      Sentry.captureException(error);
     }
   }, [selectedTransactionToUpdate]);
 
@@ -305,6 +310,7 @@ const POSPage = () => {
       console.log(error);
       toast.error("Something went wrong, try again later.");
       dispatch(setIsAppLoading(false));
+      Sentry.captureException(error);
     }
   };
 
@@ -350,6 +356,7 @@ const POSPage = () => {
       console.log(error);
       toast.error("Something went wrong, try again later.");
       dispatch(setIsAppLoading(false));
+      Sentry.captureException(error);
     }
   };
 
@@ -374,6 +381,7 @@ const POSPage = () => {
     } catch (error) {
       toast.error("Something went wrong, try again later.");
       setIsLoading(false);
+      Sentry.captureException(error);
     }
   }, [filter]);
 

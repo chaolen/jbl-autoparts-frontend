@@ -12,6 +12,7 @@ import LoadingComponent from "app/pages/shared/loading.component";
 import { clearData } from "store/slices/viewProductSlice";
 import { setEditProductId } from "store/slices/editProductSlice";
 import ProductStatus from "../search-products/components/product-status";
+import * as Sentry from '@sentry/react';
 
 const productSpecificationRows = [
   {
@@ -77,6 +78,7 @@ const ViewProduct = () => {
       console.error("Failed to fetch product:", error);
       toast.error("Failed to fetch product details.");
       setIsLoading(false);
+      Sentry.captureException(error);
     }
   };
 

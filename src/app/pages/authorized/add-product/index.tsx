@@ -13,6 +13,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "store/store";
 import { clearData } from "store/slices/addProductSlice";
 import { setIsAppLoading } from "store/slices/appSlice";
+import * as Sentry from '@sentry/react';
 
 const apiURL = process.env.REACT_APP_API_BASE_URL;
 
@@ -104,6 +105,7 @@ const AddProduct = () => {
       toast.success("Product created successfully.");
       navigate(-1);
     } catch (err) {
+      Sentry.captureException(err);
       console.error("Product creation failed:", err);
       toast.error("Create product failed.");
     }
