@@ -9,6 +9,7 @@ import { useNavigate } from "react-router";
 import { RootState } from "store/store";
 import ProductStatus from "../../search-products/components/product-status";
 import Status from "./status";
+import { formatAmount } from "helpers";
 
 type POSResultsProps = {
   addToCart: (product: CartItem) => void;
@@ -92,6 +93,9 @@ const POSResults = ({
                     {result.partNumber ?? "-"}
                   </p>
                   <Status justify="justify-start" status={result?.status} />
+                  <p className="line-clamp-3 font-medium text-primary text-xs text-left my-1">
+                    {result?.price ? formatAmount(result?.price || 0) : "-"}
+                  </p>
                   <div className="flex flex-1 items-end justify-end">
                     <p className="font-medium text-primary text-xs">
                       Stock:{" "}
